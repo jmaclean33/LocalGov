@@ -1,0 +1,184 @@
+# skillet preamble information used by panhandler
+# ---------------------------------------------------------------------
+# unique snippet name
+name: LGtest
+# label used for menu selection
+label: my_skillet_lgtest
+description: really neat stuff
+
+# type of device configuration
+# common types are panorama, panos, and template
+# https://github.com/PaloAltoNetworks/panhandler/blob/develop/docs/metadata_configuration.rst
+type: panos
+# preload static or default-based templates
+extends:
+
+# grouping of like snippets for dynamic menu creation in panhandler
+labels:
+  collection:
+    - myCollection
+
+# ---------------------------------------------------------------------
+# end of preamble section
+
+# variables section
+# ---------------------------------------------------------------------
+# variables used in the configuration templates
+# type_hint defines the form field used by panhandler
+# type_hints can be text, ip_address, or dropdown
+variables:
+  - name: hostname
+    description: Firewall hostname
+    default: myFirewall
+    type_hint: text
+  - name: choices
+    description: sample dropdown list
+    default: choices
+    type_hint: dropdown
+    dd_list:
+      - key: option1
+        value: option1
+      - key: option2
+        value: option2
+  - name: EDL_NAME
+    description: External-list name
+    default: my_edl
+    type_hint: text
+  - name: EDL_Description
+    description: External-list Description
+    default: my_edl
+    type_hint: text
+  - name: edl_url
+    description: External-list URL
+    default: my_edl
+    type_hint: text
+  - name: Tag_Name
+    description: Tag description
+    default: tag description
+    type_hint: text
+  - name: Tag_color
+    description: tag color
+    default: red
+    type_hint: dropdown
+    dd_list:
+      - key: green
+        value: color2
+      - key: orange
+        value: color6
+      - key: red
+        value: color1
+
+
+# ---------------------------------------------------------------------
+# end of variables section
+
+# snippets section
+# ---------------------------------------------------------------------
+# snippets used for api configuration including xpath and element as file name
+# files will load in the order listed
+# NOTE: The following snippets are auto-generated and ordered automatically.
+# Changing the content of the snippet may be necessary, but do NOT change the order
+
+# There is a variable called snippets that we can use to auto-generate this section for us
+snippets:
+
+  - name: external-list-557527
+    xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]
+    element: |-
+        <external-list>
+                    <entry name="{{ EDL_NAME }}">
+                      <type>
+                        <ip>
+                          <recurring>
+                            <five-minute/>
+                          </recurring>
+                          <description>{{ EDL_Description }} </description>
+                          <url>{{ edl_url }}</url>
+                        </ip>
+                      </type>
+                    </entry>
+                  </external-list>
+
+  - name: tag-519034
+    xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]
+    element: |-
+        <tag>
+                    <entry name="{{ Tag_Name }}">
+                      <color>{{ Tag_color }}</color>
+                      <comments>{{ Tag_description }}</comments>
+                    </entry>
+                  </tag>
+
+  - name: security-714599
+    xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/rulebase
+    element: |-
+        <security>
+                      <rules>
+                        <entry name="{{ EDL_NAME_OUT }}" uuid="d104d347-a2be-4ab3-a787-f40f8d416935">
+                          <to>
+                            <member>any</member>
+                          </to>
+                          <from>
+                            <member>any</member>
+                          </from>
+                          <source>
+                            <member>any</member>
+                          </source>
+                          <destination>
+                            <member>{{ EDL_NAME }}</member>
+                          </destination>
+                          <source-user>
+                            <member>any</member>
+                          </source-user>
+                          <category>
+                            <member>any</member>
+                          </category>
+                          <application>
+                            <member>any</member>
+                          </application>
+                          <service>
+                            <member>application-default</member>
+                          </service>
+                          <hip-profiles>
+                            <member>any</member>
+                          </hip-profiles>
+                          <action>deny</action>
+                          <description>EDL_NAME_OUT {{ EDL Description }} </description>
+                        </entry>
+                        <entry name="{{ EDL_NAME_IN }}" uuid="8551895c-8111-47fa-b3b4-53a88b897d14">
+                          <to>
+                            <member>any</member>
+                          </to>
+                          <from>
+                            <member>any</member>
+                          </from>
+                          <source>
+                            <member>{{ EDL_NAME }}</member>
+                          </source>
+                          <destination>
+                            <member>any</member>
+                          </destination>
+                          <source-user>
+                            <member>any</member>
+                          </source-user>
+                          <category>
+                            <member>any</member>
+                          </category>
+                          <application>
+                            <member>any</member>
+                          </application>
+                          <service>
+                            <member>application-default</member>
+                          </service>
+                          <hip-profiles>
+                            <member>any</member>
+                          </hip-profiles>
+                          <action>deny</action>
+                          <description>EDL_NAME_IN {{ edl_description }}</description>
+                        </entry>
+                      </rules>
+                    </security>
+
+
+# ---------------------------------------------------------------------
+# end of snippets section
