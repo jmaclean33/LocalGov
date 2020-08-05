@@ -141,7 +141,7 @@ snippets:
                           <enable>no</enable>
                         </lldp>
                         <ip>
-                          <entry name=" {{Trust_IP }}{{ Trust_IP_Subnet }} "/>
+                          <entry name=" {{ TRUSTED_INTERFACE_IP }}{{ TRUSTED_INTERFACE_SUBNET }} "/>
                         </ip>
                       </layer3>
                     </entry>
@@ -176,7 +176,7 @@ snippets:
     xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/address
     element: |-
         <entry name="Trust_IP">
-                      <ip-netmask>{{ 10.10.1.1/32 }}</ip-netmask>
+                      <ip-netmask>{{ TRUSTED_INTERFACE_IP.split('/')[0] }}/32</ip-netmask>
                     </entry>
 
   - name: interface-80427
