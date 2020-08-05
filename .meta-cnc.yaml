@@ -1,10 +1,10 @@
 # skillet preamble information used by panhandler
 # ---------------------------------------------------------------------
 # unique snippet name
-name: LGtest
+name: Local Gov_Base
 # label used for menu selection
-label: my_skillet_lgtest
-description: really neat stuff
+label: Local_Gov
+description: This is a base configuration for local government customers
 
 # type of device configuration
 # common types are panorama, panos, and template
@@ -16,7 +16,7 @@ extends:
 # grouping of like snippets for dynamic menu creation in panhandler
 labels:
   collection:
-    - myCollection
+    - LocalGov
 
 # ---------------------------------------------------------------------
 # end of preamble section
@@ -27,48 +27,27 @@ labels:
 # type_hint defines the form field used by panhandler
 # type_hints can be text, ip_address, or dropdown
 variables:
-  - name: hostname
-    description: Firewall hostname
-    default: myFirewall
-    type_hint: text
-  - name: choices
-    description: sample dropdown list
-    default: choices
+  - name: INCLUDE_COUNTRY_BLOCK
+    description: Add rules to permit traffic only from US, Mexico, Canada, and Cloud Providers EDL
+    default: 'no'
     type_hint: dropdown
     dd_list:
-      - key: option1
-        value: option1
-      - key: option2
-        value: option2
-  - name: EDL_NAME
-    description: External-list name
-    default: my_edl
+     - key: 'yes'
+       value: 'yes'
+     - key: 'no'
+       value: 'no'
+  - name: Untrust_zone_interface
+    description: Untrust interface
+    default: ethernet1/1
     type_hint: text
-  - name: EDL_Description
-    description: External-list Description
-    default: my_edl
+  - name: Trust_zone_interface
+    description: Trust Interface
+    default: ethernet1/2
     type_hint: text
-  - name: edl_url
-    description: External-list URL
-    default: my_edl
+  - name: TRUSTED_INTERFACE_IP
+    description: Trusted Interface IP
+    default: 10.10.1.1/32
     type_hint: text
-  - name: Tag_Name
-    description: Tag description
-    default: tag description
-    type_hint: text
-  - name: Tag_color
-    description: tag color
-    default: red
-    type_hint: dropdown
-    dd_list:
-      - key: green
-        value: color2
-      - key: orange
-        value: color6
-      - key: red
-        value: color1
-
-
 # ---------------------------------------------------------------------
 # end of variables section
 
@@ -82,41 +61,161 @@ variables:
 # There is a variable called snippets that we can use to auto-generate this section for us
 snippets:
 
-  - name: external-list-557527
-    xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]
+  - name: color-580736
+    xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/tag/entry[@name="Outbound"]
     element: |-
-        <external-list>
-                    <entry name="{{ EDL_NAME }}">
-                      <type>
+        <color>color20</color>
+
+  - name: color-974093
+    xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/tag/entry[@name="Inbound"]
+    element: |-
+        <color>color21</color>
+
+  - name: color-955686
+    xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/tag/entry[@name="Internal"]
+    element: |-
+        <color>color4</color>
+
+  - name: entry-84143
+    xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/tag
+    element: |-
+        <entry name="NIST">
+                      <color>color10</color>
+                      <comments>NIST- Compliance rules </comments>
+                    </entry>
+
+  - name: entry-873654
+    xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/tag
+    element: |-
+        <entry name="CJIS">
+                      <color>color24</color>
+                      <comments>CJIS Compliance rules </comments>
+                    </entry>
+
+  - name: entry-602579
+    xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/tag
+    element: |-
+        <entry name="Deny">
+                      <color>color1</color>
+                      <comments>Blocked traffic</comments>
+                    </entry>
+
+  - name: entry-351099
+    xpath: /config/devices/entry[@name="localhost.localdomain"]/network/interface/ethernet
+    element: |-
+        <entry name="ethernet1/1">
+                      <layer3>
+                        <ipv6>
+                          <neighbor-discovery>
+                            <router-advertisement>
+                              <enable>no</enable>
+                            </router-advertisement>
+                          </neighbor-discovery>
+                        </ipv6>
+                        <ndp-proxy>
+                          <enabled>no</enabled>
+                        </ndp-proxy>
+                        <lldp>
+                          <enable>no</enable>
+                        </lldp>
+                        <dhcp-client/>
+                      </layer3>
+                    </entry>
+
+  - name: entry-412609
+    xpath: /config/devices/entry[@name="localhost.localdomain"]/network/interface/ethernet
+    element: |-
+        <entry name="ethernet1/2">
+                      <layer3>
+                        <ipv6>
+                          <neighbor-discovery>
+                            <router-advertisement>
+                              <enable>no</enable>
+                            </router-advertisement>
+                          </neighbor-discovery>
+                        </ipv6>
+                        <ndp-proxy>
+                          <enabled>no</enabled>
+                        </ndp-proxy>
+                        <lldp>
+                          <enable>no</enable>
+                        </lldp>
                         <ip>
-                          <recurring>
-                            <five-minute/>
-                          </recurring>
-                          <description>{{ EDL_Description }} </description>
-                          <url>{{ edl_url }}</url>
+                          <entry name=" {{Trust_IP }}{{ Trust_IP_Subnet }} "/>
                         </ip>
-                      </type>
+                      </layer3>
                     </entry>
-                  </external-list>
 
-  - name: tag-519034
+  - name: entry-821461
+    xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/zone
+    element: |-
+        <entry name="Untrust">
+                      <network>
+                        <layer3>
+                          <member>{{ Untrust_zone_interface }}</member>
+                        </layer3>
+                        <zone-protection-profile>Recommended_Zone_Protection</zone-protection-profile>
+                        <log-setting>default</log-setting>
+                      </network>
+                    </entry>
+
+  - name: entry-237688
+    xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/zone
+    element: |-
+        <entry name="Trust">
+                      <network>
+                        <layer3>
+                          <member>{{ Trust_zone_interface }}</member>
+                        </layer3>
+                        <zone-protection-profile>Recommended_Zone_Protection</zone-protection-profile>
+                        <log-setting>default</log-setting>
+                      </network>
+                    </entry>
+
+  - name: entry-534268
+    xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/address
+    element: |-
+        <entry name="Trust_IP">
+                      <ip-netmask>{{ 10.10.1.1/32 }}</ip-netmask>
+                    </entry>
+
+  - name: interface-80427
+    xpath: /config/devices/entry[@name="localhost.localdomain"]/network/virtual-router/entry[@name="default"]
+    element: |-
+        <interface>
+                      <member>ethernet1/1</member>
+                      <member>ethernet1/2</member>
+                    </interface>
+
+  - name: import-471795
     xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]
     element: |-
-        <tag>
-                    <entry name="{{ Tag_Name }}">
-                      <color>{{ Tag_color }}</color>
-                      <comments>{{ Tag_description }}</comments>
-                    </entry>
-                  </tag>
+        <import>
+                    <network>
+                      <interface>
+                        <member>ethernet1/1</member>
+                        <member>ethernet1/2</member>
+                      </interface>
+                    </network>
+                  </import>
 
-  - name: security-714599
-    xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/rulebase
+  - name: member-849303
+    xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/rulebase/security/rules/entry[@name="Outbound Block Rule"]/tag
     element: |-
-        <security>
-                      <rules>
-                        <entry name="{{ EDL_NAME_OUT }}" uuid="d104d347-a2be-4ab3-a787-f40f8d416935">
+        <member>Deny</member>
+
+  - name: entry-681593
+    xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/rulebase/security/rules
+    element: |-
+       {%- if INCLUDE_COUNTRY_BLOCK == 'yes' %}
+       <entry name="Outbound Country Block" uuid="a6a493fd-fa80-4ca8-b4c2-cb08fad80bf3">
+                          <profile-setting>
+                            <group>
+                              <member>default</member>
+                            </group>
+                          </profile-setting>
                           <to>
-                            <member>any</member>
+                            <member>Trust</member>
                           </to>
                           <from>
                             <member>any</member>
@@ -125,7 +224,57 @@ snippets:
                             <member>any</member>
                           </source>
                           <destination>
-                            <member>{{ EDL_NAME }}</member>
+                            <member>CA</member>
+                            <member>MX</member>
+                            <member>US</member>
+                          </destination>
+                          <source-user>
+                            <member>any</member>
+                          </source-user>
+                          <category>
+                            <member>any</member>
+                          </category>
+                          <application>
+                            <member>any</member>
+                          </application>
+                          <service>
+                            <member>application-default</member>
+                          </service>
+                          <hip-profiles>
+                            <member>any</member>
+                          </hip-profiles>
+                          <tag>
+                            <member>Outbound</member>
+                            <member>Deny</member>
+                          </tag>
+                          <action>deny</action>
+                          <negate-destination>yes</negate-destination>
+                          <log-setting>default</log-setting>
+                        </entry>
+
+  - name: entry-668399
+    xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/rulebase/security/rules
+    element: |-
+
+        <entry name="Inbound Country Block" uuid="72e10e52-0bbb-4f94-82a4-bfa22092c397">
+                          <profile-setting>
+                            <group>
+                              <member>default</member>
+                            </group>
+                          </profile-setting>
+                          <to>
+                            <member>any</member>
+                          </to>
+                          <from>
+                            <member>Untrust</member>
+                          </from>
+                          <source>
+                            <member>CA</member>
+                            <member>MX</member>
+                            <member>US</member>
+                          </source>
+                          <destination>
+                            <member>any</member>
                           </destination>
                           <source-user>
                             <member>any</member>
@@ -143,9 +292,34 @@ snippets:
                             <member>any</member>
                           </hip-profiles>
                           <action>deny</action>
-                          <description>EDL_NAME_OUT {{ EDL Description }} </description>
+                          <log-setting>default</log-setting>
+                          <tag>
+                            <member>Inbound</member>
+                            <member>Deny</member>
+                          </tag>
+                          <negate-source>yes</negate-source>
                         </entry>
-                        <entry name="{{ EDL_NAME_IN }}" uuid="8551895c-8111-47fa-b3b4-53a88b897d14">
+                          {% endif %}
+
+  - name: member-442107
+    xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/rulebase/security/rules/entry[@name="Inbound Block Rule"]/tag
+    element: |-
+        <member>Deny</member>
+
+  - name: member-346633
+    xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/rulebase/security/rules/entry[@name="DNS Sinkhole Block"]/tag
+    element: |-
+        <member>Deny</member>
+
+  - name: entry-462566
+    xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/rulebase/security/rules
+    element: |-
+        <entry name="Block Quic" uuid="037e9b55-a051-439d-aec0-f91f8ccc4099">
+                          <profile-setting>
+                            <group>
+                              <member>default</member>
+                            </group>
+                          </profile-setting>
                           <to>
                             <member>any</member>
                           </to>
@@ -153,7 +327,7 @@ snippets:
                             <member>any</member>
                           </from>
                           <source>
-                            <member>{{ EDL_NAME }}</member>
+                            <member>any</member>
                           </source>
                           <destination>
                             <member>any</member>
@@ -165,7 +339,7 @@ snippets:
                             <member>any</member>
                           </category>
                           <application>
-                            <member>any</member>
+                            <member>quic</member>
                           </application>
                           <service>
                             <member>application-default</member>
@@ -173,11 +347,134 @@ snippets:
                           <hip-profiles>
                             <member>any</member>
                           </hip-profiles>
+                          <tag>
+                            <member>Deny</member>
+                          </tag>
                           <action>deny</action>
-                          <description>EDL_NAME_IN {{ edl_description }}</description>
+                          <log-setting>default</log-setting>
+                          <description>Blocking Quic will force web browsers to use SSL </description>
                         </entry>
-                      </rules>
-                    </security>
+
+  - name: entry-161734
+    xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/rulebase/security/rules
+    element: |-
+        <entry name="Outbound DNS" uuid="81459213-fa0f-4fb2-9c63-a3eb4e533804">
+                          <profile-setting>
+                            <group>
+                              <member>default</member>
+                            </group>
+                          </profile-setting>
+                          <to>
+                            <member>any</member>
+                          </to>
+                          <from>
+                            <member>Trust</member>
+                          </from>
+                          <source>
+                            <member>any</member>
+                          </source>
+                          <destination>
+                            <member>any</member>
+                          </destination>
+                          <source-user>
+                            <member>any</member>
+                          </source-user>
+                          <category>
+                            <member>any</member>
+                          </category>
+                          <application>
+                            <member>dns</member>
+                          </application>
+                          <service>
+                            <member>application-default</member>
+                          </service>
+                          <hip-profiles>
+                            <member>any</member>
+                          </hip-profiles>
+                          <action>allow</action>
+                          <log-setting>default</log-setting>
+                          <tag>
+                            <member>Outbound</member>
+                          </tag>
+                        </entry>
+
+  - name: entry-274750
+    xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/rulebase/security/rules
+    element: |-
+        <entry name="Outbound Web browsing" uuid="89c0df82-6527-4fb1-8626-3904cf344fe0">
+                          <profile-setting>
+                            <group>
+                              <member>default</member>
+                            </group>
+                          </profile-setting>
+                          <to>
+                            <member>any</member>
+                          </to>
+                          <from>
+                            <member>Trust</member>
+                          </from>
+                          <source>
+                            <member>any</member>
+                          </source>
+                          <destination>
+                            <member>any</member>
+                          </destination>
+                          <source-user>
+                            <member>any</member>
+                          </source-user>
+                          <category>
+                            <member>any</member>
+                          </category>
+                          <application>
+                            <member>google-base</member>
+                            <member>ssl</member>
+                            <member>web-browsing</member>
+                          </application>
+                          <service>
+                            <member>application-default</member>
+                          </service>
+                          <hip-profiles>
+                            <member>any</member>
+                          </hip-profiles>
+                          <action>allow</action>
+                          <log-setting>default</log-setting>
+                          <tag>
+                            <member>Outbound</member>
+                          </tag>
+                        </entry>
+
+  - name: entry-64247
+    xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/rulebase/decryption/rules
+    element: |-
+        <entry name="Decryption rule" uuid="8de3e20c-0747-40b0-89d1-c630ccf31bfc">
+                          <category>
+                            <member>any</member>
+                          </category>
+                          <service>
+                            <member>any</member>
+                          </service>
+                          <type>
+                            <ssl-forward-proxy/>
+                          </type>
+                          <from>
+                            <member>any</member>
+                          </from>
+                          <to>
+                            <member>Untrust</member>
+                          </to>
+                          <source>
+                            <member>any</member>
+                          </source>
+                          <destination>
+                            <member>any</member>
+                          </destination>
+                          <source-user>
+                            <member>any</member>
+                          </source-user>
+                          <action>decrypt</action>
+                          <profile>Recommended_Decryption_Profile</profile>
+                          <disabled>yes</disabled>
+                        </entry>
 
 
 # ---------------------------------------------------------------------
