@@ -44,7 +44,7 @@ variables:
     description: Trust Interface
     default: ethernet1/2
     type_hint: text
-  - name: TRUSTED_INTERFACE_IP
+  - name: 10.10.1.1/32
     description: Trusted Interface IP
     default: 10.10.1.1/32
     type_hint: text
