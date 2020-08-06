@@ -141,7 +141,7 @@ snippets:
                           <enable>no</enable>
                         </lldp>
                         <ip>
-                          <entry name=" {{ TRUSTED_INTERFACE_IP }} "/>
+                          <entry name="Trust_IP"/>
                         </ip>
                       </layer3>
                     </entry>
