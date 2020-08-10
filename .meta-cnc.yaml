@@ -100,6 +100,13 @@ snippets:
                       <comments>Blocked traffic</comments>
                     </entry>
 
+  - name: entry-534268
+    xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/address
+    element: |-
+        <entry name="Trust_IP">
+                      <ip-netmask>{{ TRUSTED_INTERFACE_IP.split('/')[0] }}/32</ip-netmask>
+                    </entry>
+
   - name: entry-351099
     xpath: /config/devices/entry[@name="localhost.localdomain"]/network/interface/ethernet
     element: |-
@@ -172,12 +179,6 @@ snippets:
                       </network>
                     </entry>
 
-  - name: entry-534268
-    xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/address
-    element: |-
-        <entry name="Trust_IP">
-                      <ip-netmask>{{ TRUSTED_INTERFACE_IP.split('/')[0] }}/32</ip-netmask>
-                    </entry>
 
   - name: interface-80427
     xpath: /config/devices/entry[@name="localhost.localdomain"]/network/virtual-router/entry[@name="default"]
@@ -256,7 +257,7 @@ snippets:
     xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/rulebase/security/rules
     element: |-
 
-        <entry name="Inbound Country Block" uuid="72e10e52-0bbb-4f94-82a4-bfa22092c397">
+        <entry name="Inbound Country Block">
                           <profile-setting>
                             <group>
                               <member>default</member>
@@ -314,7 +315,7 @@ snippets:
   - name: entry-462566
     xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/rulebase/security/rules
     element: |-
-        <entry name="Block Quic" uuid="037e9b55-a051-439d-aec0-f91f8ccc4099">
+        <entry name="Block Quic">
                           <profile-setting>
                             <group>
                               <member>default</member>
@@ -358,7 +359,7 @@ snippets:
   - name: entry-161734
     xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/rulebase/security/rules
     element: |-
-        <entry name="Outbound DNS" uuid="81459213-fa0f-4fb2-9c63-a3eb4e533804">
+        <entry name="Outbound DNS">
                           <profile-setting>
                             <group>
                               <member>default</member>
@@ -401,7 +402,7 @@ snippets:
   - name: entry-274750
     xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/rulebase/security/rules
     element: |-
-        <entry name="Outbound Web browsing" uuid="89c0df82-6527-4fb1-8626-3904cf344fe0">
+        <entry name="Outbound Web browsing">
                           <profile-setting>
                             <group>
                               <member>default</member>
@@ -446,7 +447,7 @@ snippets:
   - name: entry-64247
     xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/rulebase/decryption/rules
     element: |-
-        <entry name="Decryption rule" uuid="8de3e20c-0747-40b0-89d1-c630ccf31bfc">
+        <entry name="Decryption rule">
                           <category>
                             <member>any</member>
                           </category>
