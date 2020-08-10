@@ -206,9 +206,10 @@ snippets:
         <member>Deny</member>
 
   - name: entry-681593
+    when: INCLUDE_COUNTRY_BLOCK == 'yes'
     xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/rulebase/security/rules
     element: |-
-       {%- when INCLUDE_COUNTRY_BLOCK == 'yes' %}
+
        <entry name="Outbound Country Block" uuid="a6a493fd-fa80-4ca8-b4c2-cb08fad80bf3">
                           <profile-setting>
                             <group>
@@ -254,6 +255,7 @@ snippets:
                         </entry>
 
   - name: entry-668399
+    when: INCLUDE_COUNTRY_BLOCK == 'yes'
     xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/rulebase/security/rules
     element: |-
 
@@ -300,7 +302,7 @@ snippets:
                           </tag>
                           <negate-source>yes</negate-source>
                         </entry>
-                          {% endwhen %}
+
 
   - name: member-442107
     xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/rulebase/security/rules/entry[@name="Inbound Block Rule"]/tag
