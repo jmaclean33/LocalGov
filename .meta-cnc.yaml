@@ -210,7 +210,7 @@ snippets:
     xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/rulebase/security/rules
     element: |-
 
-       <entry name="Outbound Country Block" uuid="a6a493fd-fa80-4ca8-b4c2-cb08fad80bf3">
+       <entry name="Outbound Country Block">
                           <profile-setting>
                             <group>
                               <member>default</member>
