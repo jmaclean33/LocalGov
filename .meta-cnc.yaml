@@ -199,9 +199,25 @@ snippets:
                       </interface>
                     </network>
                   </import>
-
-  - name: member-849303
+  - name: device_config_file
+    cmd: parse
+    variable: config
+    outputs:
+      - name: security_rules_list
+        capture_list: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/rulebase/security/rules/entry/@name
+  - name: inbound-block-rule-tag
+    when: "'Inbound Block Rule' in security_rules_list"
+    xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/rulebase/security/rules/entry[@name="Inbound Block Rule"]/tag
+    element: |-
+        <member>Deny</member>
+  - name: outbound-block-rule-tag
+    when: "'Outbound Block Rule' in security_rules_list"
     xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/rulebase/security/rules/entry[@name="Outbound Block Rule"]/tag
+    element: |-
+        <member>Deny</member>
+  - name: dns-sinkhole-block-rule-tag
+    when: "'DNS Sinkhole Block' in security_rules_list"
+    xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/rulebase/security/rules/entry[@name="DNS Sinkhole Block"]/tag
     element: |-
         <member>Deny</member>
 
@@ -302,17 +318,6 @@ snippets:
                           </tag>
                           <negate-source>yes</negate-source>
                         </entry>
-
-
-  - name: member-442107
-    xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/rulebase/security/rules/entry[@name="Inbound Block Rule"]/tag
-    element: |-
-        <member>Deny</member>
-
-  - name: member-346633
-    xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/rulebase/security/rules/entry[@name="DNS Sinkhole Block"]/tag
-    element: |-
-        <member>Deny</member>
 
   - name: entry-462566
     xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/rulebase/security/rules
