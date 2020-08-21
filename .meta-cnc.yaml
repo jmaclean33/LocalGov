@@ -61,144 +61,147 @@ variables:
 # There is a variable called snippets that we can use to auto-generate this section for us
 snippets:
 
-  - name: color-580736
+  - name: outbound_tag_color
     xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/tag/entry[@name="Outbound"]
     element: |-
         <color>color20</color>
 
-  - name: color-974093
+  - name: inbound_tag_color
     xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/tag/entry[@name="Inbound"]
     element: |-
         <color>color21</color>
 
-  - name: color-955686
+  - name: internal_tag_color
     xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/tag/entry[@name="Internal"]
     element: |-
         <color>color4</color>
 
-  - name: entry-84143
+  - name: NIST_tag
     xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/tag
     element: |-
         <entry name="NIST">
-                      <color>color10</color>
-                      <comments>NIST- Compliance rules </comments>
-                    </entry>
+          <color>color10</color>
+          <comments>NIST- Compliance rules </comments>
+        </entry>
 
-  - name: entry-873654
+  - name: CJIS_tag
     xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/tag
     element: |-
         <entry name="CJIS">
-                      <color>color24</color>
-                      <comments>CJIS Compliance rules </comments>
-                    </entry>
+          <color>color24</color>
+          <comments>CJIS Compliance rules </comments>
+        </entry>
 
-  - name: entry-602579
+  - name: Block_traffic_tag
     xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/tag
     element: |-
         <entry name="Deny">
-                      <color>color1</color>
-                      <comments>Blocked traffic</comments>
-                    </entry>
+          <color>color1</color>
+          <comments>Blocked traffic</comments>
+        </entry>
 
-  - name: entry-534268
+  - name: trusted_ip_address_slash_32
     xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/address
     element: |-
         <entry name="Trust_IP">
-                      <ip-netmask>{{ TRUSTED_INTERFACE_IP.split('/')[0] }}/32</ip-netmask>
-                    </entry>
+          <ip-netmask>{{ TRUSTED_INTERFACE_IP.split('/')[0] }}/32</ip-netmask>
+        </entry>
 
-  - name: entry-351099
+  - name: untrusted-interface
     xpath: /config/devices/entry[@name="localhost.localdomain"]/network/interface/ethernet
     element: |-
-        <entry name="ethernet1/1">
-                      <layer3>
-                        <ipv6>
-                          <neighbor-discovery>
-                            <router-advertisement>
-                              <enable>no</enable>
-                            </router-advertisement>
-                          </neighbor-discovery>
-                        </ipv6>
-                        <ndp-proxy>
-                          <enabled>no</enabled>
-                        </ndp-proxy>
-                        <lldp>
-                          <enable>no</enable>
-                        </lldp>
-                        <dhcp-client/>
-                      </layer3>
-                    </entry>
+        <entry name="{{ Untrust_zone_interface }}">
+          <layer3>
+            <ipv6>
+              <neighbor-discovery>
+                <router-advertisement>
+                  <enable>no</enable>
+                </router-advertisement>
+              </neighbor-discovery>
+            </ipv6>
+            <ndp-proxy>
+              <enabled>no</enabled>
+            </ndp-proxy>
+            <lldp>
+              <enable>no</enable>
+            </lldp>
+            <dhcp-client/>
+          </layer3>
+        </entry>
 
-  - name: entry-412609
+  - name: trusted-interface
     xpath: /config/devices/entry[@name="localhost.localdomain"]/network/interface/ethernet
     element: |-
-        <entry name="ethernet1/2">
-                      <layer3>
-                        <ipv6>
-                          <neighbor-discovery>
-                            <router-advertisement>
-                              <enable>no</enable>
-                            </router-advertisement>
-                          </neighbor-discovery>
-                        </ipv6>
-                        <ndp-proxy>
-                          <enabled>no</enabled>
-                        </ndp-proxy>
-                        <lldp>
-                          <enable>no</enable>
-                        </lldp>
-                        <ip>
-                          <entry name="Trust_IP"/>
-                        </ip>
-                      </layer3>
-                    </entry>
+        <entry name="{{ Trust_zone_interface }}">
+          <layer3>
+            <ipv6>
+              <neighbor-discovery>
+                <router-advertisement>
+                  <enable>no</enable>
+                </router-advertisement>
+              </neighbor-discovery>
+            </ipv6>
+            <ndp-proxy>
+              <enabled>no</enabled>
+            </ndp-proxy>
+            <lldp>
+              <enable>no</enable>
+            </lldp>
+            <ip>
+              <entry name="Trust_IP"/>
+            </ip>
+          </layer3>
+        </entry>
 
-  - name: entry-821461
+  - name: untrust_zone
     xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/zone
     element: |-
         <entry name="Untrust">
-                      <network>
-                        <layer3>
-                          <member>{{ Untrust_zone_interface }}</member>
-                        </layer3>
-                        <zone-protection-profile>Recommended_Zone_Protection</zone-protection-profile>
-                        <log-setting>default</log-setting>
-                      </network>
-                    </entry>
+          <network>
+            <layer3>
+              <member>{{ Untrust_zone_interface }}</member>
+            </layer3>
+            <zone-protection-profile>Recommended_Zone_Protection</zone-protection-profile>
+            <log-setting>default</log-setting>
+          </network>
+        </entry>
 
-  - name: entry-237688
+  - name: trust_zone
     xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/zone
     element: |-
         <entry name="Trust">
-                      <network>
-                        <layer3>
-                          <member>{{ Trust_zone_interface }}</member>
-                        </layer3>
-                        <zone-protection-profile>Recommended_Zone_Protection</zone-protection-profile>
-                        <log-setting>default</log-setting>
-                      </network>
-                    </entry>
+          <network>
+            <layer3>
+              <member>{{ Trust_zone_interface }}</member>
+            </layer3>
+            <zone-protection-profile>Recommended_Zone_Protection</zone-protection-profile>
+            <log-setting>default</log-setting>
+          </network>
+        </entry>
 
 
-  - name: interface-80427
+  - name: virtual-router
     xpath: /config/devices/entry[@name="localhost.localdomain"]/network/virtual-router/entry[@name="default"]
     element: |-
         <interface>
-                      <member>ethernet1/1</member>
-                      <member>ethernet1/2</member>
-                    </interface>
+          <member>{{ Untrust_zone_interface }}</member>
+          <member>{{ Trust_zone_interface }}</member>
+        </interface>
 
+  # I think this is optional for the NGFW skillets and only required for Panorama
   - name: import-471795
     xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]
     element: |-
         <import>
-                    <network>
-                      <interface>
-                        <member>ethernet1/1</member>
-                        <member>ethernet1/2</member>
-                      </interface>
-                    </network>
-                  </import>
+          <network>
+            <interface>
+              <member>{{ Untrust_zone_interface }}</member>
+              <member>{{ Trust_zone_interface }}</member>
+            </interface>
+          </network>
+        </import>
+
+  # capture list of security rules to use in when conditional
   - name: device_config_file
     cmd: parse
     variable: config
@@ -221,268 +224,268 @@ snippets:
     element: |-
         <member>Deny</member>
 
-  - name: entry-681593
+  - name: include_outbound_country_block_rule
     when: INCLUDE_COUNTRY_BLOCK == 'yes'
     xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/rulebase/security/rules
     element: |-
 
        <entry name="Outbound Country Block">
-                          <profile-setting>
-                            <group>
-                              <member>default</member>
-                            </group>
-                          </profile-setting>
-                          <to>
-                            <member>Trust</member>
-                          </to>
-                          <from>
-                            <member>any</member>
-                          </from>
-                          <source>
-                            <member>any</member>
-                          </source>
-                          <destination>
-                            <member>CA</member>
-                            <member>MX</member>
-                            <member>US</member>
-                          </destination>
-                          <source-user>
-                            <member>any</member>
-                          </source-user>
-                          <category>
-                            <member>any</member>
-                          </category>
-                          <application>
-                            <member>any</member>
-                          </application>
-                          <service>
-                            <member>application-default</member>
-                          </service>
-                          <hip-profiles>
-                            <member>any</member>
-                          </hip-profiles>
-                          <tag>
-                            <member>Outbound</member>
-                            <member>Deny</member>
-                          </tag>
-                          <action>deny</action>
-                          <negate-destination>yes</negate-destination>
-                          <log-setting>default</log-setting>
-                        </entry>
+          <profile-setting>
+            <group>
+              <member>default</member>
+            </group>
+          </profile-setting>
+          <to>
+            <member>Trust</member>
+          </to>
+          <from>
+            <member>any</member>
+          </from>
+          <source>
+            <member>any</member>
+          </source>
+          <destination>
+            <member>CA</member>
+            <member>MX</member>
+            <member>US</member>
+          </destination>
+          <source-user>
+            <member>any</member>
+          </source-user>
+          <category>
+            <member>any</member>
+          </category>
+          <application>
+            <member>any</member>
+          </application>
+          <service>
+            <member>application-default</member>
+          </service>
+          <hip-profiles>
+            <member>any</member>
+          </hip-profiles>
+          <tag>
+            <member>Outbound</member>
+            <member>Deny</member>
+          </tag>
+          <action>deny</action>
+          <negate-destination>yes</negate-destination>
+          <log-setting>default</log-setting>
+        </entry>
 
-  - name: entry-668399
+  - name: include_inbound_country_block_rule
     when: INCLUDE_COUNTRY_BLOCK == 'yes'
     xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/rulebase/security/rules
     element: |-
 
         <entry name="Inbound Country Block">
-                          <profile-setting>
-                            <group>
-                              <member>default</member>
-                            </group>
-                          </profile-setting>
-                          <to>
-                            <member>any</member>
-                          </to>
-                          <from>
-                            <member>Untrust</member>
-                          </from>
-                          <source>
-                            <member>CA</member>
-                            <member>MX</member>
-                            <member>US</member>
-                          </source>
-                          <destination>
-                            <member>any</member>
-                          </destination>
-                          <source-user>
-                            <member>any</member>
-                          </source-user>
-                          <category>
-                            <member>any</member>
-                          </category>
-                          <application>
-                            <member>any</member>
-                          </application>
-                          <service>
-                            <member>application-default</member>
-                          </service>
-                          <hip-profiles>
-                            <member>any</member>
-                          </hip-profiles>
-                          <action>deny</action>
-                          <log-setting>default</log-setting>
-                          <tag>
-                            <member>Inbound</member>
-                            <member>Deny</member>
-                          </tag>
-                          <negate-source>yes</negate-source>
-                        </entry>
+            <profile-setting>
+              <group>
+                <member>default</member>
+              </group>
+            </profile-setting>
+            <to>
+              <member>any</member>
+            </to>
+            <from>
+              <member>Untrust</member>
+            </from>
+            <source>
+              <member>CA</member>
+              <member>MX</member>
+              <member>US</member>
+            </source>
+            <destination>
+              <member>any</member>
+            </destination>
+            <source-user>
+              <member>any</member>
+            </source-user>
+            <category>
+              <member>any</member>
+            </category>
+            <application>
+              <member>any</member>
+            </application>
+            <service>
+              <member>application-default</member>
+            </service>
+            <hip-profiles>
+              <member>any</member>
+            </hip-profiles>
+            <action>deny</action>
+            <log-setting>default</log-setting>
+            <tag>
+              <member>Inbound</member>
+              <member>Deny</member>
+            </tag>
+            <negate-source>yes</negate-source>
+          </entry>
 
   - name: entry-462566
     xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/rulebase/security/rules
     element: |-
         <entry name="Block Quic">
-                          <profile-setting>
-                            <group>
-                              <member>default</member>
-                            </group>
-                          </profile-setting>
-                          <to>
-                            <member>any</member>
-                          </to>
-                          <from>
-                            <member>any</member>
-                          </from>
-                          <source>
-                            <member>any</member>
-                          </source>
-                          <destination>
-                            <member>any</member>
-                          </destination>
-                          <source-user>
-                            <member>any</member>
-                          </source-user>
-                          <category>
-                            <member>any</member>
-                          </category>
-                          <application>
-                            <member>quic</member>
-                          </application>
-                          <service>
-                            <member>application-default</member>
-                          </service>
-                          <hip-profiles>
-                            <member>any</member>
-                          </hip-profiles>
-                          <tag>
-                            <member>Deny</member>
-                          </tag>
-                          <action>deny</action>
-                          <log-setting>default</log-setting>
-                          <description>Blocking Quic will force web browsers to use SSL </description>
-                        </entry>
+          <profile-setting>
+            <group>
+              <member>default</member>
+            </group>
+          </profile-setting>
+          <to>
+            <member>any</member>
+          </to>
+          <from>
+            <member>any</member>
+          </from>
+          <source>
+            <member>any</member>
+          </source>
+          <destination>
+            <member>any</member>
+          </destination>
+          <source-user>
+            <member>any</member>
+          </source-user>
+          <category>
+            <member>any</member>
+          </category>
+          <application>
+            <member>quic</member>
+          </application>
+          <service>
+            <member>application-default</member>
+          </service>
+          <hip-profiles>
+            <member>any</member>
+          </hip-profiles>
+          <tag>
+            <member>Deny</member>
+          </tag>
+          <action>deny</action>
+          <log-setting>default</log-setting>
+          <description>Blocking Quic will force web browsers to use SSL </description>
+        </entry>
 
-  - name: entry-161734
+  - name: outbound_dns_rule
     xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/rulebase/security/rules
     element: |-
         <entry name="Outbound DNS">
-                          <profile-setting>
-                            <group>
-                              <member>default</member>
-                            </group>
-                          </profile-setting>
-                          <to>
-                            <member>any</member>
-                          </to>
-                          <from>
-                            <member>Trust</member>
-                          </from>
-                          <source>
-                            <member>any</member>
-                          </source>
-                          <destination>
-                            <member>any</member>
-                          </destination>
-                          <source-user>
-                            <member>any</member>
-                          </source-user>
-                          <category>
-                            <member>any</member>
-                          </category>
-                          <application>
-                            <member>dns</member>
-                          </application>
-                          <service>
-                            <member>application-default</member>
-                          </service>
-                          <hip-profiles>
-                            <member>any</member>
-                          </hip-profiles>
-                          <action>allow</action>
-                          <log-setting>default</log-setting>
-                          <tag>
-                            <member>Outbound</member>
-                          </tag>
-                        </entry>
+          <profile-setting>
+            <group>
+              <member>default</member>
+            </group>
+          </profile-setting>
+          <to>
+            <member>any</member>
+          </to>
+          <from>
+            <member>Trust</member>
+          </from>
+          <source>
+            <member>any</member>
+          </source>
+          <destination>
+            <member>any</member>
+          </destination>
+          <source-user>
+            <member>any</member>
+          </source-user>
+          <category>
+            <member>any</member>
+          </category>
+          <application>
+            <member>dns</member>
+          </application>
+          <service>
+            <member>application-default</member>
+          </service>
+          <hip-profiles>
+            <member>any</member>
+          </hip-profiles>
+          <action>allow</action>
+          <log-setting>default</log-setting>
+          <tag>
+            <member>Outbound</member>
+          </tag>
+        </entry>
 
-  - name: entry-274750
+  - name: outbound_web_browsing_rule
     xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/rulebase/security/rules
     element: |-
         <entry name="Outbound Web browsing">
-                          <profile-setting>
-                            <group>
-                              <member>default</member>
-                            </group>
-                          </profile-setting>
-                          <to>
-                            <member>any</member>
-                          </to>
-                          <from>
-                            <member>Trust</member>
-                          </from>
-                          <source>
-                            <member>any</member>
-                          </source>
-                          <destination>
-                            <member>any</member>
-                          </destination>
-                          <source-user>
-                            <member>any</member>
-                          </source-user>
-                          <category>
-                            <member>any</member>
-                          </category>
-                          <application>
-                            <member>google-base</member>
-                            <member>ssl</member>
-                            <member>web-browsing</member>
-                          </application>
-                          <service>
-                            <member>application-default</member>
-                          </service>
-                          <hip-profiles>
-                            <member>any</member>
-                          </hip-profiles>
-                          <action>allow</action>
-                          <log-setting>default</log-setting>
-                          <tag>
-                            <member>Outbound</member>
-                          </tag>
-                        </entry>
+          <profile-setting>
+            <group>
+              <member>default</member>
+            </group>
+          </profile-setting>
+          <to>
+            <member>any</member>
+          </to>
+          <from>
+            <member>Trust</member>
+          </from>
+          <source>
+            <member>any</member>
+          </source>
+          <destination>
+            <member>any</member>
+          </destination>
+          <source-user>
+            <member>any</member>
+          </source-user>
+          <category>
+            <member>any</member>
+          </category>
+          <application>
+            <member>google-base</member>
+            <member>ssl</member>
+            <member>web-browsing</member>
+          </application>
+          <service>
+            <member>application-default</member>
+          </service>
+          <hip-profiles>
+            <member>any</member>
+          </hip-profiles>
+          <action>allow</action>
+          <log-setting>default</log-setting>
+          <tag>
+            <member>Outbound</member>
+          </tag>
+        </entry>
 
-  - name: entry-64247
+  - name: description_rule
     xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/rulebase/decryption/rules
     element: |-
         <entry name="Decryption rule">
-                          <category>
-                            <member>any</member>
-                          </category>
-                          <service>
-                            <member>any</member>
-                          </service>
-                          <type>
-                            <ssl-forward-proxy/>
-                          </type>
-                          <from>
-                            <member>any</member>
-                          </from>
-                          <to>
-                            <member>Untrust</member>
-                          </to>
-                          <source>
-                            <member>any</member>
-                          </source>
-                          <destination>
-                            <member>any</member>
-                          </destination>
-                          <source-user>
-                            <member>any</member>
-                          </source-user>
-                          <action>decrypt</action>
-                          <profile>Recommended_Decryption_Profile</profile>
-                          <disabled>yes</disabled>
-                        </entry>
+          <category>
+            <member>any</member>
+          </category>
+          <service>
+            <member>any</member>
+          </service>
+          <type>
+            <ssl-forward-proxy/>
+          </type>
+          <from>
+            <member>any</member>
+          </from>
+          <to>
+            <member>Untrust</member>
+          </to>
+          <source>
+            <member>any</member>
+          </source>
+          <destination>
+            <member>any</member>
+          </destination>
+          <source-user>
+            <member>any</member>
+          </source-user>
+          <action>decrypt</action>
+          <profile>Recommended_Decryption_Profile</profile>
+          <disabled>yes</disabled>
+        </entry>
 
 
 # ---------------------------------------------------------------------
